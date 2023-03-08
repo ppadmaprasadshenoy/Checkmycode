@@ -23,4 +23,4 @@ function checkValueInRange(value, limit, tolerance) {
   return matchedClassification ? matchedClassification.result : 'NORMAL';
 }
 
-module.exports = {calculateLimits, checkValueInRange};
+module.exports = {checkValueInRange};
