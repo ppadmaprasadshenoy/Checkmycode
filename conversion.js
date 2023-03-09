@@ -1,3 +1,4 @@
+
 function convertTemperatureUnit(temperature, fromUnit, toUnit) {
   if (fromUnit === toUnit) return temperature;
 
@@ -12,6 +13,7 @@ function convertTemperatureUnit(temperature, fromUnit, toUnit) {
   if (!conversionFunction) {
     throw new Error(`Invalid temperature units: ${fromUnit}, ${toUnit}`);
   }
+
   return conversionFunction(temperature);
 }
 
