@@ -1,4 +1,3 @@
-
 function convertTemperatureUnit(temperature, fromUnit, toUnit) {
   if (fromUnit === toUnit) return temperature;
 

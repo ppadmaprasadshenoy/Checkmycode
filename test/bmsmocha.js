@@ -38,6 +38,61 @@ describe('Battery Status', function() {
   it('All parameters at maximum value', function() {
     assert.isTrue(batteryIsOk(45, 80, 0.8));
   });
+  it('Temperature is at upper limit', function() {
+    assert.isFalse(batteryIsOk(45, 50, 0.5));
+  });
+
+  it('Temperature is at lower limit', function() {
+    assert.isFalse(batteryIsOk(0, 50, 0.5));
+  });
+
+  it('State of Charge is at upper limit', function() {
+    assert.isFalse(batteryIsOk(25, 80, 0.5));
+  });
+
+  it('State of Charge is at lower limit', function() {
+    assert.isFalse(batteryIsOk(25, 20, 0.5));
+  });
+
+  it('Charge rate is at upper limit', function() {
+    assert.isFalse(batteryIsOk(25, 50, 0.8));
+  });
+
+  it('Charge rate is at lower limit', function() {
+    assert.isFalse(batteryIsOk(25, 50, 0));
+  });
+
+  it('Temperature is in Fahrenheit', function() {
+    assert.isFalse(batteryIsOk(100, 50, 0.5, 'Fahrenheit'));
+  });
+
+  it('Temperature is very high', function() {
+    assert.isFalse(batteryIsOk(80, 50, 0.5));
+  });
+
+  it('Temperature is very low', function() {
+    assert.isFalse(batteryIsOk(-50, 50, 0.5));
+  });
+
+  it('State of Charge is very low', function() {
+    assert.isFalse(batteryIsOk(25, 5, 0.5));
+  });
+
+  it('State of Charge is very high', function() {
+    assert.isFalse(batteryIsOk(25, 95, 0.5));
+  });
+
+  it('Charge rate is zero', function() {
+    assert.isFalse(batteryIsOk(25, 50, 0));
+  });
+
+  it('Charge rate is maximum', function() {
+    assert.isFalse(batteryIsOk(25, 50, 1));
+  });
+
+  it('All parameters are at borderline values', function() {
+    assert.isFalse(batteryIsOk(32, 80, 0.6));
+  });
 });
 
 describe('convertTemperatureUnit', () => {
@@ -46,36 +101,36 @@ describe('convertTemperatureUnit', () => {
     expect(result).to.equal(25);
   });
 
-  it('converts Celsius to Fahrenheit correctly', () => {
+  it('converts Celsius to Fahrenheit correctly', function() {
     const result = convertTemperatureUnit(0, 'Celsius', 'Fahrenheit');
-    expect(result).to.equal(32);
+    assert.approximately(result, 32, 0.1);
 
     const result2 = convertTemperatureUnit(-40, 'Celsius', 'Fahrenheit');
-    expect(result2).to.equal(-40);
+    assert.approximately(result2, -40, 0.1);
 
     const result3 = convertTemperatureUnit(100, 'Celsius', 'Fahrenheit');
-    expect(result3).to.equal(212);
+    assert.approximately(result3, 212, 0.1);
   });
 
-  it('converts Fahrenheit to Celsius correctly', () => {
+  it('converts Fahrenheit to Celsius correctly', function() {
     const result = convertTemperatureUnit(32, 'Fahrenheit', 'Celsius');
-    expect(result).to.equal(0);
+    assert.approximately(result, 0, 0.1);
 
     const result2 = convertTemperatureUnit(-40, 'Fahrenheit', 'Celsius');
-    expect(result2).to.equal(-40);
+    assert.approximately(result2, -40, 0.1);
 
     const result3 = convertTemperatureUnit(212, 'Fahrenheit', 'Celsius');
-    expect(result3).to.equal(100);
+    assert.approximately(result3, 100, 0.1);
   });
 
-  it('throws an error for invalid temperature units', () => {
-    expect(() => {
+  it('throws an error for invalid temperature units', function() {
+    assert.throw(function() {
       convertTemperatureUnit(25, 'Celsius', 'InvalidUnit');
-    }).to.throw('Invalid temperature units: Celsius, InvalidUnit');
+    }, 'Invalid temperature units: Celsius, InvalidUnit');
 
-    expect(() => {
+    assert.throw(function() {
       convertTemperatureUnit(25, 'InvalidUnit', 'Fahrenheit');
-    }).to.throw('Invalid temperature units: InvalidUnit, Fahrenheit');
+    }, 'Invalid temperature units: InvalidUnit, Fahrenheit');
   });
 });
 

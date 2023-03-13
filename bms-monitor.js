@@ -25,15 +25,6 @@ function batteryIsOk(temperature, soc, chargeRate, temperatureUnit = 'Celsius') 
       MEASUREMENT_LIMITS.chargeRate.tolerance,
   );
 
-  console.log(`Temperature is ${temperature} ${temperatureUnit}.`);
-  console.log(`Status: ${temperatureStatus}`);
-
-  console.log(`State of Charge is ${soc}${MEASUREMENT_LIMITS.soc.unit}.`);
-  console.log(`Status: ${socStatus}`);
-
-  console.log(`Charge Rate is ${chargeRate}${MEASUREMENT_LIMITS.chargeRate.unit}.`);
-  console.log(`Status: ${chargeRateStatus}`);
-
   return temperatureStatus === 'NORMAL' && socStatus === 'NORMAL' && chargeRateStatus === 'NORMAL';
 }
 
