@@ -2,9 +2,9 @@ const {convertTemperatureUnit} = require('./conversion');
 const {checkValueInRange} = require('./limits');
 
 const MEASUREMENT_LIMITS = {
-  temperature: {limit: {min: 0, max: 45}, tolerance: 0.05, unit: 'Celsius'},
-  soc: {limit: {min: 20, max: 80}, tolerance: 0.05, unit: '%'},
-  chargeRate: {limit: {min: 0, max: 0.8}, tolerance: 0.05, unit: 'per hour'},
+  temperature: {limit: {min: 0, max: 45}},
+  soc: {limit: {min: 20, max: 80}},
+  chargeRate: {limit: {min: 0, max: 0.8}},
 };
 
 function batteryIsOk(temperature, soc, chargeRate, temperatureUnit = 'Celsius') {

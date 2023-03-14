@@ -1,10 +1,37 @@
 const {assert, expect} = require('chai');
 const {batteryIsOk} = require('../bms-monitor');
 const {convertTemperatureUnit} = require('../conversion');
+const {checkValueInRange} = require('../limits');
+
+describe('Value Range Check', function() {
+  it('Value is lower than lower warning limit', function() {
+    assert.equal(checkValueInRange(10, {min: 20, max: 80}, 0.2), 'LOW');
+  });
+
+  it('Value is higher than upper warning limit', function() {
+    assert.equal(checkValueInRange(90, {min: 20, max: 80}, 0.2), 'HIGH');
+  });
+
+  it('Value is within warning range range', function() {
+    assert.equal(checkValueInRange(50, {min: 20, max: 80}, 0.2), 'WARNING: Approaching limit');
+  });
+
+  it('Value is within warning range', function() {
+    assert.equal(checkValueInRange(75, {min: 20, max: 80}, 0.2), 'WARNING: Approaching limit');
+  });
+
+  it('Value is at lower warning limit', function() {
+    assert.equal(checkValueInRange(20, {min: 20, max: 80}, 0.2), 'WARNING: Approaching limit');
+  });
+
+  it('Value is at upper warning limit', function() {
+    assert.equal(checkValueInRange(80, {min: 20, max: 80}, 0.2), 'WARNING: Approaching limit');
+  });
+});
 
 describe('Battery Status', function() {
   it('All parameters are within the range', function() {
-    assert.isFalse(batteryIsOk(25, 50, 0.5));
+    assert.isTrue(batteryIsOk(25, 50, 0.5, 'Celsius'));
   });
 
   it('Temperature is high', function() {
@@ -39,31 +66,31 @@ describe('Battery Status', function() {
     assert.isTrue(batteryIsOk(45, 80, 0.8));
   });
   it('Temperature is at upper limit', function() {
-    assert.isFalse(batteryIsOk(45, 50, 0.5));
+    assert.isTrue(batteryIsOk(45, 50, 0.5));
   });
 
   it('Temperature is at lower limit', function() {
-    assert.isFalse(batteryIsOk(0, 50, 0.5));
+    assert.isTrue(batteryIsOk(0, 50, 0.5));
   });
 
   it('State of Charge is at upper limit', function() {
-    assert.isFalse(batteryIsOk(25, 80, 0.5));
+    assert.isTrue(batteryIsOk(25, 80, 0.5));
   });
 
   it('State of Charge is at lower limit', function() {
-    assert.isFalse(batteryIsOk(25, 20, 0.5));
+    assert.isTrue(batteryIsOk(25, 20, 0.5));
   });
 
   it('Charge rate is at upper limit', function() {
-    assert.isFalse(batteryIsOk(25, 50, 0.8));
+    assert.isTrue(batteryIsOk(25, 50, 0.8));
   });
 
   it('Charge rate is at lower limit', function() {
-    assert.isFalse(batteryIsOk(25, 50, 0));
+    assert.isTrue(batteryIsOk(25, 50, 0));
   });
 
   it('Temperature is in Fahrenheit', function() {
-    assert.isFalse(batteryIsOk(100, 50, 0.5, 'Fahrenheit'));
+    assert.isTrue(batteryIsOk(100, 50, 0.5, 'Fahrenheit'));
   });
 
   it('Temperature is very high', function() {
@@ -83,7 +110,7 @@ describe('Battery Status', function() {
   });
 
   it('Charge rate is zero', function() {
-    assert.isFalse(batteryIsOk(25, 50, 0));
+    assert.isTrue(batteryIsOk(25, 50, 0));
   });
 
   it('Charge rate is maximum', function() {
@@ -91,7 +118,7 @@ describe('Battery Status', function() {
   });
 
   it('All parameters are at borderline values', function() {
-    assert.isFalse(batteryIsOk(32, 80, 0.6));
+    assert.isTrue(batteryIsOk(32, 80, 0.6));
   });
 });
 

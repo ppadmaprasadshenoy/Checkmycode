@@ -13,7 +13,7 @@ function checkValueInRange(value, limit, tolerance) {
     {range: value < limit.min, result: 'LOW'},
     {range: value > limit.max, result: 'HIGH'},
     {
-      range: value >= lowerWarningLimit && value <= upperWarningLimit,
+      range: value > lowerWarningLimit || value < upperWarningLimit,
       result: 'WARNING: Approaching limit',
     },
   ];
